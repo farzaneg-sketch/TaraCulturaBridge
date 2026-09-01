@@ -475,24 +475,6 @@ const EVENTS = [
     desc_en:"Music, food, and haft-sin displays to welcome the new year together.",
     desc_fa:"موسیقی، غذا و سفره هفت‌سین برای استقبال از سال نو در کنار هم.",
     capacity: 120 },
-  { id:"farsi-101-spring", program:"Farsi & English Classes", date:"2027-02-04", time:"6:30 PM",
-    title_en:"Farsi 101 — New Session", title_fa:"فارسی ۱۰۱ — دوره جدید",
-    loc_en:"Room 2, Tara Center", loc_fa:"اتاق ۲، مرکز تارا",
-    desc_en:"An 8-week beginner Farsi course, no prior experience needed.",
-    desc_fa:"یک دوره ۸ هفته‌ای فارسی مقدماتی، بدون نیاز به تجربه قبلی.",
-    capacity: 20 },
-  { id:"newcomer-orientation", program:"Newcomer Support", date:"2027-01-17", time:"11:00 AM",
-    title_en:"Newcomer Orientation", title_fa:"جلسه آشنایی تازه‌واردان",
-    loc_en:"Tara Center, Main Room", loc_fa:"مرکز تارا، سالن اصلی",
-    desc_en:"A walkthrough of local services, paperwork, and how Tara can help.",
-    desc_fa:"مروری بر خدمات محلی، مدارک لازم و اینکه تارا چگونه می‌تواند کمک کند.",
-    capacity: null },
-  { id:"youth-mentor-mixer", program:"Youth Mentorship", date:"2027-04-11", time:"4:00 PM",
-    title_en:"Mentor & Mentee Mixer", title_fa:"دیدار منتور و منتی",
-    loc_en:"Riverside Park Pavilion", loc_fa:"غرفه پارک کنار رودخانه",
-    desc_en:"An informal outdoor meetup to match new mentees with volunteer mentors.",
-    desc_fa:"دیدار غیررسمی در فضای باز برای معرفی منتی‌های جدید به منتورهای داوطلب.",
-    capacity: 40 },
   { id:"mehregan-harvest", program:"Cultural Events", date:"2026-10-10", time:"To be determined", time_fa:"متعاقباً اعلام می‌شود",
     title_en:"Thanksgiving & Mehregan Harvest Festival", title_fa:"جشن برداشت / مهرگان",
     loc_en:"To be determined", loc_fa:"متعاقباً اعلام می‌شود",
@@ -578,7 +560,6 @@ async function renderEvents(){
         <h3><a href="events/${ev.id}.html" style="color:inherit;text-decoration:none;">${currentLang==="fa" ? ev.title_fa : ev.title_en}</a></h3>
         <div class="event-meta"><span>🕔 ${currentLang==="fa" && ev.time_fa ? ev.time_fa : ev.time}</span><span>📍 ${currentLang==="fa" ? ev.loc_fa : ev.loc_en}</span></div>
         <p class="event-desc">${currentLang==="fa" ? ev.desc_fa : ev.desc_en}</p>
-        ${ev.capacity !== null ? `<div class="spots ${isFull?'full':''}">${isFull ? t('full') : remaining + ' ' + t('spots_left')}</div>` : ""}
         <form class="reg-form" data-event="${ev.id}">
           <input type="text" placeholder="${t('reg_name')}" class="reg-name" required>
           <input type="email" placeholder="${t('reg_email')}" class="reg-email" required>
