@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" id="htmlRoot">
 <head>
@@ -491,7 +492,43 @@ const EVENTS = [
     loc_en:"Riverside Park Pavilion", loc_fa:"غرفه پارک کنار رودخانه",
     desc_en:"An informal outdoor meetup to match new mentees with volunteer mentors.",
     desc_fa:"دیدار غیررسمی در فضای باز برای معرفی منتی‌های جدید به منتورهای داوطلب.",
-    capacity: 40 }
+    capacity: 40 },
+  { id:"mehregan-harvest", program:"Cultural Events", date:"2026-10-10", time:"To be determined", time_fa:"متعاقباً اعلام می‌شود",
+    title_en:"Thanksgiving & Mehregan Harvest Festival", title_fa:"جشن برداشت / مهرگان",
+    loc_en:"To be determined", loc_fa:"متعاقباً اعلام می‌شود",
+    desc_en:"A shared harvest celebration blending Thanksgiving with the ancient Persian festival of Mehregan.",
+    desc_fa:"جشنی مشترک از برداشت که شکرگزاری را با جشن باستانی ایرانی مهرگان پیوند می‌دهد.",
+    capacity: 100 },
+  { id:"childrens-day", program:"Cultural Events", date:"2026-11-14", time:"To be determined", time_fa:"متعاقباً اعلام می‌شود",
+    title_en:"World Children's Day", title_fa:"روز جهانی کودک",
+    loc_en:"To be determined", loc_fa:"متعاقباً اعلام می‌شود",
+    desc_en:"Games, crafts, and storytelling to celebrate children in our community.",
+    desc_fa:"بازی، هنر دستی و قصه‌گویی برای بزرگداشت کودکان جامعه ما.",
+    capacity: 80 },
+  { id:"yalda-xmas", program:"Cultural Events", date:"2026-12-12", time:"To be determined", time_fa:"متعاقباً اعلام می‌شود",
+    title_en:"Christmas & Yalda Night", title_fa:"شب یلدا",
+    loc_en:"To be determined", loc_fa:"متعاقباً اعلام می‌شود",
+    desc_en:"A cozy winter gathering that brings together Christmas cheer and the ancient Persian Yalda Night.",
+    desc_fa:"گردهمایی گرم زمستانی که شادی کریسمس را با شب یلدای باستانی ایران پیوند می‌دهد.",
+    capacity: 100 },
+  { id:"winter-gathering", program:"Cultural Events", date:"2027-01-16", time:"To be determined", time_fa:"متعاقباً اعلام می‌شود",
+    title_en:"Winter Community Gathering", title_fa:"گردهمایی زمستانی",
+    loc_en:"To be determined", loc_fa:"متعاقباً اعلام می‌شود",
+    desc_en:"A relaxed midwinter get-together for the community to connect over tea and treats.",
+    desc_fa:"دیداری آرام در دل زمستان برای گردهمایی جامعه بر سر چای و شیرینی.",
+    capacity: 60 },
+  { id:"valentine-esfandegan", program:"Cultural Events", date:"2027-02-13", time:"To be determined", time_fa:"متعاقباً اعلام می‌شود",
+    title_en:"Valentine's Day & Esfandegan", title_fa:"روز ولنتاین / اسفندگان",
+    loc_en:"To be determined", loc_fa:"متعاقباً اعلام می‌شود",
+    desc_en:"An evening celebrating love and connection, pairing Valentine's Day with the Persian festival of Esfandegan.",
+    desc_fa:"شبی در بزرگداشت عشق و پیوند، همراه با جشن ایرانی اسفندگان.",
+    capacity: 90 },
+  { id:"chaharshanbe-suri", program:"Cultural Events", date:"2027-03-13", time:"To be determined", time_fa:"متعاقباً اعلام می‌شود",
+    title_en:"Chaharshanbe Suri", title_fa:"چهارشنبه‌سوری / عید",
+    loc_en:"To be determined", loc_fa:"متعاقباً اعلام می‌شود",
+    desc_en:"The festival of fire on the last Wednesday eve before Nowruz, with music and celebration.",
+    desc_fa:"جشن آتش در آخرین چهارشنبه پیش از نوروز، همراه با موسیقی و شادی.",
+    capacity: 100 }
 ];
 
 let currentLang = "en";
@@ -538,8 +575,8 @@ async function renderEvents(){
       <div class="event-date"><span class="day">${dateParts.day}</span><span class="mon">${dateParts.mon}</span></div>
       <div class="event-info">
         <div class="event-tag">${ev.program}</div>
-        <h3>${currentLang==="fa" ? ev.title_fa : ev.title_en}</h3>
-        <div class="event-meta"><span>🕔 ${ev.time}</span><span>📍 ${currentLang==="fa" ? ev.loc_fa : ev.loc_en}</span></div>
+        <h3><a href="events/${ev.id}.html" style="color:inherit;text-decoration:none;">${currentLang==="fa" ? ev.title_fa : ev.title_en}</a></h3>
+        <div class="event-meta"><span>🕔 ${currentLang==="fa" && ev.time_fa ? ev.time_fa : ev.time}</span><span>📍 ${currentLang==="fa" ? ev.loc_fa : ev.loc_en}</span></div>
         <p class="event-desc">${currentLang==="fa" ? ev.desc_fa : ev.desc_en}</p>
         ${ev.capacity !== null ? `<div class="spots ${isFull?'full':''}">${isFull ? t('full') : remaining + ' ' + t('spots_left')}</div>` : ""}
         <form class="reg-form" data-event="${ev.id}">
