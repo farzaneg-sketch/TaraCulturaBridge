@@ -236,7 +236,6 @@
       <li><a href="#about" data-i18n="nav_about">About Us</a></li>
       <li><a href="#mission" data-i18n="nav_mission">Values &amp; Mission</a></li>
       <li><a href="#events" data-i18n="nav_events">Events</a></li>
-      <li><a href="#programs" data-i18n="nav_programs">Programs</a></li>
       <li><a href="#volunteer" data-i18n="nav_volunteer">Volunteer</a></li>
       <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
     </ul>
@@ -301,15 +300,6 @@
     <h2 class="section-title" data-i18n="events_title">Upcoming Events</h2>
     <p class="section-lede" data-i18n="events_lede">Pick a program below to see the date, and register directly — no account needed.</p>
     <div class="events-list" id="eventsList"></div>
-  </div>
-</section>
-
-<section class="page-section" id="programs">
-  <div class="wrap">
-    <div class="section-eyebrow" data-i18n="programs_eyebrow">Ongoing</div>
-    <h2 class="section-title" data-i18n="programs_title">Our Programs</h2>
-    <p class="section-lede" data-i18n="programs_lede">Standing programs that run throughout the year — most of the events on our calendar belong to one of these.</p>
-    <div class="programs-grid" id="programsGrid"></div>
   </div>
 </section>
 
@@ -403,7 +393,7 @@
 const TRANSLATIONS = {
   en: {
     nav_about:"About Us", nav_mission:"Values & Mission", nav_events:"Events",
-    nav_programs:"Programs", nav_volunteer:"Volunteer", nav_donate:"Donate", nav_contact:"Contact",
+    nav_volunteer:"Volunteer", nav_donate:"Donate", nav_contact:"Contact",
     hero_title:"Building bridges between cultures",
     hero_sub:"Tara Cultural Bridge Society connects communities through shared language, heritage, and everyday support — for newcomers and longtime neighbors alike.",
     hero_cta1:"See upcoming events", hero_cta2:"Get involved",
@@ -418,8 +408,6 @@ const TRANSLATIONS = {
     value3_title:"Open to everyone", value3_body:"Newcomers and lifelong residents are equally welcome — the bridge runs both directions.",
     events_eyebrow:"Calendar", events_title:"Upcoming Events",
     events_lede:"Pick a program below to see the date, and register directly — no account needed.",
-    programs_eyebrow:"Ongoing", programs_title:"Our Programs",
-    programs_lede:"Standing programs that run throughout the year — most of the events on our calendar belong to one of these.",
     donate_eyebrow:"Support Us", donate_title:"Chip in what you can",
     donate_body:"Every donation goes directly toward classes, events, and newcomer support — no overhead, no middle layer.",
     donate_other:"Other", donate_note:"Connect a payment processor (Stripe, PayPal, etc.) here before this goes live.",
@@ -439,7 +427,7 @@ const TRANSLATIONS = {
   },
   fa: {
     nav_about:"درباره ما", nav_mission:"ارزش‌ها و مأموریت", nav_events:"رویدادها",
-    nav_programs:"برنامه‌ها", nav_volunteer:"داوطلب شوید", nav_donate:"کمک مالی", nav_contact:"تماس با ما",
+    nav_volunteer:"داوطلب شوید", nav_donate:"کمک مالی", nav_contact:"تماس با ما",
     hero_title:"ساختن پل میان فرهنگ‌ها",
     hero_sub:"انجمن پل فرهنگی تارا جوامع را از طریق زبان مشترک، میراث فرهنگی و حمایت روزمره به هم پیوند می‌دهد — برای تازه‌واردان و همسایگان قدیمی، هر دو.",
     hero_cta1:"رویدادهای پیش‌رو", hero_cta2:"داوطلب شوید",
@@ -454,8 +442,6 @@ const TRANSLATIONS = {
     value3_title:"برای همه باز است", value3_body:"تازه‌واردان و ساکنان قدیمی به یک اندازه خوش‌آمدند — پل در هر دو جهت کار می‌کند.",
     events_eyebrow:"تقویم", events_title:"رویدادهای پیش‌رو",
     events_lede:"یک برنامه را از میان رویدادهای زیر انتخاب کنید و مستقیماً ثبت‌نام کنید — نیازی به حساب کاربری نیست.",
-    programs_eyebrow:"در حال اجرا", programs_title:"برنامه‌های ما",
-    programs_lede:"برنامه‌های ثابتی که در طول سال اجرا می‌شوند — بیشتر رویدادهای تقویم ما به یکی از این‌ها تعلق دارند.",
     donate_eyebrow:"از ما حمایت کنید", donate_title:"هر مقدار که می‌توانید کمک کنید",
     donate_body:"هر کمک مالی مستقیماً صرف کلاس‌ها، رویدادها و حمایت از تازه‌واردان می‌شود — بدون هزینه اضافی.",
     donate_other:"مبلغ دیگر", donate_note:"پیش از فعال‌سازی، یک درگاه پرداخت (Stripe، PayPal و غیره) به این بخش متصل کنید.",
@@ -474,21 +460,6 @@ const TRANSLATIONS = {
     lang_toggle_label:"English"
   }
 };
-
-const PROGRAMS = [
-  { icon:"🗣️", title_en:"Farsi & English Classes", title_fa:"کلاس‌های فارسی و انگلیسی",
-    body_en:"Weekly language classes for all ages and levels, taught by community volunteers.",
-    body_fa:"کلاس‌های زبان هفتگی برای همه سنین و سطوح، توسط داوطلبان جامعه تدریس می‌شود." },
-  { icon:"🤝", title_en:"Newcomer Support", title_fa:"حمایت از تازه‌واردان",
-    body_en:"Practical help with settling in — paperwork, housing questions, and a friendly first contact.",
-    body_fa:"کمک عملی برای استقرار — کاغذبازی‌ها، سوالات مسکن و یک تماس اولیه دوستانه." },
-  { icon:"🎭", title_en:"Cultural Events", title_fa:"رویدادهای فرهنگی",
-    body_en:"Nowruz, Yalda, and seasonal gatherings that bring the whole community together.",
-    body_fa:"نوروز، یلدا و گردهمایی‌های فصلی که کل جامعه را گرد هم می‌آورد." },
-  { icon:"🌱", title_en:"Youth Mentorship", title_fa:"منتورینگ جوانان",
-    body_en:"Pairing young people with mentors who've navigated the same bridge before them.",
-    body_fa:"همراه کردن جوانان با منتورهایی که پیش از آن‌ها همین مسیر را طی کرده‌اند." }
-];
 
 const EVENTS = [
   { id:"nowruz-2027", program:"Cultural Events", date:"2027-03-20", time:"5:00 PM",
@@ -627,23 +598,6 @@ async function renderEvents(){
   }
 }
 
-function renderPrograms(){
-  const grid = document.getElementById("programsGrid");
-  grid.innerHTML = "";
-  PROGRAMS.forEach(function(p){
-    const card = document.createElement("div");
-    card.className = "program-card";
-    card.innerHTML = `
-      <div class="program-icon">${p.icon}</div>
-      <div>
-        <h3>${currentLang==="fa" ? p.title_fa : p.title_en}</h3>
-        <p>${currentLang==="fa" ? p.body_fa : p.body_en}</p>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
 function setLanguage(lang){
   currentLang = lang;
   const html = document.getElementById("htmlRoot");
@@ -652,7 +606,6 @@ function setLanguage(lang){
   document.getElementById("langBtn").textContent = t("lang_toggle_label");
   applyStaticTranslations();
   renderEvents();
-  renderPrograms();
 }
 
 document.getElementById("langBtn").addEventListener("click", function(){
