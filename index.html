@@ -390,6 +390,18 @@
 </footer>
 
 <script>
+// Paste the Google Apps Script Web App URL here after you deploy it (see Code.gs instructions).
+const SHEETS_ENDPOINT = "https://script.google.com/macros/s/AKfycbyaU70ye5oCxP7JvfEakDpjkVAz2imrK52al_hx1cVc1ZPjDEs0CoL9VpFJcNDg_FmT/exec";
+
+async function sendToSheet(payload){
+  await fetch(SHEETS_ENDPOINT, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  });
+}
+
 const TRANSLATIONS = {
   en: {
     nav_about:"About Us", nav_mission:"Values & Mission", nav_events:"Events",
@@ -526,12 +538,9 @@ function formatDate(iso, lang){
 }
 
 async function getRegistrationCount(eventId){
-  try{
-    const res = await window.storage.get("registrations:" + eventId, true);
-    if(!res) return 0;
-    const arr = JSON.parse(res.value);
-    return Array.isArray(arr) ? arr.length : 0;
-  }catch(e){ return 0; }
+  // Live headcounts aren't tracked client-side anymore (registrations go straight to
+  // the Google Sheet). This always returns 0, so capacity/"Full" checks are effectively off.
+  return 0;
 }
 
 async function renderEvents(){
@@ -579,14 +588,14 @@ async function renderEvents(){
       const guestsVal = form.querySelector(".reg-guests").value || "0";
       const msgEl = form.querySelector(".reg-msg");
       try{
-        const key = "registrations:" + ev.id;
-        let existing = [];
-        try{
-          const res = await window.storage.get(key, true);
-          if(res) existing = JSON.parse(res.value);
-        }catch(err){ existing = []; }
-        existing.push({ name:nameVal, email:emailVal, guests:guestsVal, ts: Date.now() });
-        await window.storage.set(key, JSON.stringify(existing), true);
+        await sendToSheet({
+          type: "registration",
+          event: ev.id,
+          eventTitle: currentLang === "fa" ? ev.title_fa : ev.title_en,
+          name: nameVal,
+          email: emailVal,
+          guests: guestsVal
+        });
         msgEl.textContent = t("reg_success");
         msgEl.className = "reg-msg ok";
         form.querySelector(".reg-submit").disabled = true;
@@ -622,13 +631,7 @@ document.getElementById("volunteerForm").addEventListener("submit", async functi
   const message = document.getElementById("volMessage").value.trim();
   const msgEl = document.getElementById("volMsg");
   try{
-    let existing = [];
-    try{
-      const res = await window.storage.get("volunteer_signups", true);
-      if(res) existing = JSON.parse(res.value);
-    }catch(err){ existing = []; }
-    existing.push({ name, email, interest, message, ts: Date.now() });
-    await window.storage.set("volunteer_signups", JSON.stringify(existing), true);
+    await sendToSheet({ type: "volunteer", name, email, interest, message });
     msgEl.textContent = t("reg_success");
     msgEl.className = "reg-msg ok";
     e.target.reset();
