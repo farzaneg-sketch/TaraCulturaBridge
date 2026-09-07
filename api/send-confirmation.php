@@ -83,115 +83,49 @@ if ($lang === 'fa') {
         . "</div>";
 }
 
-function smtpSendMail($host, $port, $user, $pass, $fromEmail, $fromName, $to, $subject, $htmlBody) {
-    $errno = 0;
-    $errstr = '';
-    $sock = @stream_socket_client("tcp://{$host}:{$port}", $errno, $errstr, 15);
-    if (!$sock) {
-        return [false, "Connect failed: $errstr ($errno)"];
-    }
-    stream_set_timeout($sock, 15);
+function sendViaSmtp2goApi($apiKey, $fromEmail, $fromName, $to, $subject, $htmlBody) {
+    $payload = [
+        'sender' => "{$fromName} <{$fromEmail}>",
+        'to' => ["<{$to}>"],
+        'subject' => $subject,
+        'html_body' => $htmlBody,
+        'text_body' => trim(strip_tags($htmlBody)),
+    ];
 
-    $read = function () use ($sock) {
-        $data = '';
-        while ($line = fgets($sock, 515)) {
-            $data .= $line;
-            if (isset($line[3]) && $line[3] === ' ') {
-                break;
-            }
-        }
-        return $data;
-    };
-    $write = function ($cmd) use ($sock) {
-        fwrite($sock, $cmd . "\r\n");
-    };
+    $ch = curl_init('https://api.smtp2go.com/v3/email/send');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'X-Smtp2go-Api-Key: ' . $apiKey,
+            'Accept: application/json',
+        ],
+        CURLOPT_POSTFIELDS => json_encode($payload),
+        CURLOPT_TIMEOUT => 15,
+    ]);
+    $responseBody = curl_exec($ch);
+    $curlErr = curl_error($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
 
-    $resp = $read();
-    if (strpos($resp, '220') !== 0) {
-        fclose($sock);
-        return [false, "Bad greeting: $resp"];
-    }
-
-    $write("EHLO tarabridge.ca");
-    $read();
-
-    $write("STARTTLS");
-    $resp = $read();
-    if (strpos($resp, '220') !== 0) {
-        fclose($sock);
-        return [false, "STARTTLS failed: $resp"];
+    if ($responseBody === false) {
+        return [false, "Request failed: $curlErr"];
     }
 
-    if (!stream_socket_enable_crypto($sock, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
-        fclose($sock);
-        return [false, "TLS handshake failed"];
+    $decoded = json_decode($responseBody, true);
+    $failed = $decoded['data']['failed'] ?? null;
+    $emailId = $decoded['data']['email_id'] ?? null;
+
+    if ($httpCode === 200 && $failed === 0 && $emailId) {
+        return [true, $emailId];
     }
 
-    $write("EHLO tarabridge.ca");
-    $read();
-
-    $write("AUTH LOGIN");
-    $read();
-    $write(base64_encode($user));
-    $read();
-    $write(base64_encode($pass));
-    $resp = $read();
-    if (strpos($resp, '235') !== 0) {
-        fclose($sock);
-        return [false, "Auth failed: $resp"];
-    }
-
-    $write("MAIL FROM:<{$fromEmail}>");
-    $resp = $read();
-    if (strpos($resp, '250') !== 0) {
-        fclose($sock);
-        return [false, "MAIL FROM failed: $resp"];
-    }
-
-    $write("RCPT TO:<{$to}>");
-    $resp = $read();
-    if (strpos($resp, '250') !== 0 && strpos($resp, '251') !== 0) {
-        fclose($sock);
-        return [false, "RCPT TO failed: $resp"];
-    }
-
-    $write("DATA");
-    $resp = $read();
-    if (strpos($resp, '354') !== 0) {
-        fclose($sock);
-        return [false, "DATA failed: $resp"];
-    }
-
-    $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
-    $encodedFromName = '=?UTF-8?B?' . base64_encode($fromName) . '?=';
-
-    $headers = [];
-    $headers[] = "From: {$encodedFromName} <{$fromEmail}>";
-    $headers[] = "To: <{$to}>";
-    $headers[] = "Subject: {$encodedSubject}";
-    $headers[] = "MIME-Version: 1.0";
-    $headers[] = "Content-Type: text/html; charset=UTF-8";
-    $headers[] = "Content-Transfer-Encoding: base64";
-
-    $encodedBody = chunk_split(base64_encode($htmlBody));
-    $message = implode("\r\n", $headers) . "\r\n\r\n" . $encodedBody . "\r\n.";
-    $write($message);
-    $resp = $read();
-    if (strpos($resp, '250') !== 0) {
-        fclose($sock);
-        return [false, "Message send failed: $resp"];
-    }
-
-    $write("QUIT");
-    fclose($sock);
-    return [true, "OK"];
+    return [false, "HTTP $httpCode: $responseBody"];
 }
 
-list($ok, $info) = smtpSendMail(
-    SMTP_HOST,
-    SMTP_PORT,
-    SMTP_USER,
-    SMTP_PASS,
+list($ok, $info) = sendViaSmtp2goApi(
+    SMTP2GO_API_KEY,
     FROM_EMAIL,
     FROM_NAME,
     $to,
@@ -200,7 +134,7 @@ list($ok, $info) = smtpSendMail(
 );
 
 if ($ok) {
-    echo json_encode(['status' => 'ok']);
+    echo json_encode(['status' => 'ok', 'email_id' => $info]);
 } else {
     http_response_code(502);
     echo json_encode(['status' => 'error', 'message' => $info]);
