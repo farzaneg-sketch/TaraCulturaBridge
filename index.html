@@ -433,7 +433,9 @@ const TRANSLATIONS = {
     contact_email_label:"Email", contact_phone_label:"Phone", contact_instagram_label:"Instagram",
     footer_text:"© 2026 Tara Cultural Bridge Society — hello@taracbs.org",
     register:"Register", full:"Full", spots_left:"spots left",
-    reg_name:"Full name", reg_email:"Email", reg_guests:"Guests (optional)", reg_submit:"Confirm registration",
+    reg_kidName:"Child's name", reg_kidAge:"Child's age", reg_parentName:"Parent's name",
+    reg_email:"Email", reg_phone:"Phone", reg_allergy:"Allergies (write “None” if none)",
+    reg_submit:"Confirm registration",
     reg_success:"You're registered — see you there!", reg_error:"Something went wrong, please try again.",
     lang_toggle_label:"فارسی"
   },
@@ -467,7 +469,9 @@ const TRANSLATIONS = {
     contact_email_label:"ایمیل", contact_phone_label:"تلفن", contact_instagram_label:"اینستاگرام",
     footer_text:"© ۲۰۲۶ انجمن پل فرهنگی تارا — hello@taracbs.org",
     register:"ثبت‌نام", full:"تکمیل ظرفیت", spots_left:"جای خالی",
-    reg_name:"نام کامل", reg_email:"ایمیل", reg_guests:"تعداد همراهان (اختیاری)", reg_submit:"تأیید ثبت‌نام",
+    reg_kidName:"نام کودک", reg_kidAge:"سن کودک", reg_parentName:"نام والد",
+    reg_email:"ایمیل", reg_phone:"تلفن", reg_allergy:"حساسیت غذایی (در صورت نبود «ندارد» بنویسید)",
+    reg_submit:"تأیید ثبت‌نام",
     reg_success:"ثبت‌نام شما انجام شد — آنجا می‌بینیمتان!", reg_error:"مشکلی پیش آمد، دوباره تلاش کنید.",
     lang_toggle_label:"English"
   }
@@ -579,9 +583,12 @@ async function renderEvents(){
         <div class="event-meta"><span>🕔 ${currentLang==="fa" && ev.time_fa ? ev.time_fa : ev.time}</span><span>📍 ${currentLang==="fa" ? ev.loc_fa : ev.loc_en}</span></div>
         <p class="event-desc">${currentLang==="fa" ? ev.desc_fa : ev.desc_en}</p>
         <form class="reg-form" data-event="${ev.id}">
-          <input type="text" placeholder="${t('reg_name')}" class="reg-name" required>
+          <input type="text" placeholder="${t('reg_kidName')}" class="reg-kidname" required>
+          <input type="number" min="0" placeholder="${t('reg_kidAge')}" class="reg-kidage" required>
+          <input type="text" placeholder="${t('reg_parentName')}" class="reg-parentname" required>
           <input type="email" placeholder="${t('reg_email')}" class="reg-email" required>
-          <input type="number" min="0" placeholder="${t('reg_guests')}" class="reg-guests">
+          <input type="tel" placeholder="${t('reg_phone')}" class="reg-phone" required>
+          <textarea placeholder="${t('reg_allergy')}" class="reg-allergy" required></textarea>
           <button type="submit" class="btn btn-solid reg-submit">${t('reg_submit')}</button>
           <span class="reg-msg"></span>
         </form>
@@ -599,18 +606,24 @@ async function renderEvents(){
     }
     form.addEventListener("submit", async function(e){
       e.preventDefault();
-      const nameVal = form.querySelector(".reg-name").value.trim();
+      const kidNameVal = form.querySelector(".reg-kidname").value.trim();
+      const kidAgeVal = form.querySelector(".reg-kidage").value.trim();
+      const parentNameVal = form.querySelector(".reg-parentname").value.trim();
       const emailVal = form.querySelector(".reg-email").value.trim();
-      const guestsVal = form.querySelector(".reg-guests").value || "0";
+      const phoneVal = form.querySelector(".reg-phone").value.trim();
+      const allergyVal = form.querySelector(".reg-allergy").value.trim();
       const msgEl = form.querySelector(".reg-msg");
       try{
         await sendToSheet({
           type: "registration",
           event: ev.id,
           eventTitle: currentLang === "fa" ? ev.title_fa : ev.title_en,
-          name: nameVal,
+          kidName: kidNameVal,
+          kidAge: kidAgeVal,
+          parentName: parentNameVal,
           email: emailVal,
-          guests: guestsVal
+          phone: phoneVal,
+          allergy: allergyVal
         });
         msgEl.textContent = t("reg_success");
         msgEl.className = "reg-msg ok";
