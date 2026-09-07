@@ -432,7 +432,7 @@ const TRANSLATIONS = {
     contact_lede:"Questions, ideas, or just want to say hello? Reach us here.",
     contact_email_label:"Email", contact_phone_label:"Phone", contact_instagram_label:"Instagram",
     footer_text:"© 2026 Tara Cultural Bridge Society — hello@taracbs.org",
-    register:"Register", full:"Full", spots_left:"spots left",
+    register:"Register", cancel:"Cancel", registered:"Registered ✓", full:"Full", spots_left:"spots left",
     reg_kidName:"Child's name", reg_kidAge:"Child's age", reg_parentName:"Parent's name",
     reg_email:"Email", reg_phone:"Phone", reg_allergy:"Allergies (write “None” if none)",
     reg_submit:"Confirm registration",
@@ -468,7 +468,7 @@ const TRANSLATIONS = {
     contact_lede:"سؤال یا ایده‌ای دارید یا فقط می‌خواهید سلام کنید؟ از این طریق با ما در ارتباط باشید.",
     contact_email_label:"ایمیل", contact_phone_label:"تلفن", contact_instagram_label:"اینستاگرام",
     footer_text:"© ۲۰۲۶ انجمن پل فرهنگی تارا — hello@taracbs.org",
-    register:"ثبت‌نام", full:"تکمیل ظرفیت", spots_left:"جای خالی",
+    register:"ثبت‌نام", cancel:"انصراف", registered:"ثبت‌نام شد ✓", full:"تکمیل ظرفیت", spots_left:"جای خالی",
     reg_kidName:"نام کودک", reg_kidAge:"سن کودک", reg_parentName:"نام والد",
     reg_email:"ایمیل", reg_phone:"تلفن", reg_allergy:"حساسیت غذایی (در صورت نبود «ندارد» بنویسید)",
     reg_submit:"تأیید ثبت‌نام",
@@ -602,7 +602,10 @@ async function renderEvents(){
     const regBtn = card.querySelector(".btn-register");
     const form = card.querySelector(".reg-form");
     if(!isFull){
-      regBtn.addEventListener("click", function(){ form.classList.toggle("open"); });
+      regBtn.addEventListener("click", function(){
+        const opening = form.classList.toggle("open");
+        regBtn.textContent = opening ? t('cancel') : t('register');
+      });
     }
     form.addEventListener("submit", async function(e){
       e.preventDefault();
@@ -628,6 +631,8 @@ async function renderEvents(){
         msgEl.textContent = t("reg_success");
         msgEl.className = "reg-msg ok";
         form.querySelector(".reg-submit").disabled = true;
+        regBtn.textContent = t("registered");
+        regBtn.disabled = true;
       }catch(err){
         msgEl.textContent = t("reg_error");
         msgEl.className = "reg-msg err";
