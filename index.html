@@ -473,7 +473,8 @@ const TRANSLATIONS = {
   }
 };
 
-const EVENTS = [
+// Used only if the Events sheet can't be reached (offline, script error, etc.)
+const FALLBACK_EVENTS = [
   { id:"nowruz-2027", program:"Cultural Events", date:"2027-03-20", time:"5:00 PM",
     title_en:"Nowruz Celebration", title_fa:"جشن نوروز",
     loc_en:"Community Hall", loc_fa:"سالن اجتماعات",
@@ -517,6 +518,21 @@ const EVENTS = [
     desc_fa:"جشن آتش در آخرین چهارشنبه پیش از نوروز، همراه با موسیقی و شادی.",
     capacity: 100 }
 ];
+
+// Live event data, edited by staff directly in the Google Sheet (see the "Events" tab).
+let EVENTS = FALLBACK_EVENTS;
+
+async function loadEvents(){
+  try{
+    const res = await fetch(SHEETS_ENDPOINT + "?action=events", { cache: "no-store" });
+    if(!res.ok) throw new Error("Bad response " + res.status);
+    const data = await res.json();
+    const valid = Array.isArray(data) ? data.filter(ev => ev && ev.id && ev.date) : [];
+    if(valid.length){ EVENTS = valid; }
+  }catch(err){
+    console.warn("Could not load events from the sheet, showing fallback events.", err);
+  }
+}
 
 let currentLang = "en";
 function t(key){ return TRANSLATIONS[currentLang][key] || key; }
@@ -642,6 +658,7 @@ document.getElementById("volunteerForm").addEventListener("submit", async functi
 });
 
 setLanguage("en");
+loadEvents().then(renderEvents);
 </script>
 </body>
 </html>
