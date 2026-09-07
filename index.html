@@ -402,6 +402,20 @@ async function sendToSheet(payload){
   });
 }
 
+const CONFIRMATION_ENDPOINT = "/api/send-confirmation.php";
+
+async function sendConfirmationEmail(payload){
+  try{
+    await fetch(CONFIRMATION_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  }catch(err){
+    console.warn("Confirmation email failed to send.", err);
+  }
+}
+
 const TRANSLATIONS = {
   en: {
     nav_about:"About Us", nav_mission:"Values & Mission", nav_events:"Events",
@@ -627,6 +641,16 @@ async function renderEvents(){
           email: emailVal,
           phone: phoneVal,
           allergy: allergyVal
+        });
+        sendConfirmationEmail({
+          to: emailVal,
+          parentName: parentNameVal,
+          kidName: kidNameVal,
+          eventTitle: currentLang === "fa" ? ev.title_fa : ev.title_en,
+          eventDate: `${dateParts.day} ${dateParts.mon}`,
+          eventTime: currentLang === "fa" && ev.time_fa ? ev.time_fa : ev.time,
+          eventLoc: currentLang === "fa" ? ev.loc_fa : ev.loc_en,
+          lang: currentLang
         });
         msgEl.textContent = t("reg_success");
         msgEl.className = "reg-msg ok";
