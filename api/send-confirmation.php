@@ -26,6 +26,7 @@ if (!$input) {
     exit;
 }
 
+$type = ($input['type'] ?? 'event') === 'volunteer' ? 'volunteer' : 'event';
 $to = trim($input['to'] ?? '');
 $parentName = trim($input['parentName'] ?? '');
 $kidName = trim($input['kidName'] ?? '');
@@ -33,19 +34,47 @@ $eventTitle = trim($input['eventTitle'] ?? '');
 $eventDate = trim($input['eventDate'] ?? '');
 $eventTime = trim($input['eventTime'] ?? '');
 $eventLoc = trim($input['eventLoc'] ?? '');
+$volunteerName = trim($input['name'] ?? '');
 $lang = ($input['lang'] ?? 'en') === 'fa' ? 'fa' : 'en';
-
-if (!$to || !filter_var($to, FILTER_VALIDATE_EMAIL) || $eventTitle === '') {
-    http_response_code(400);
-    echo json_encode(['status' => 'error', 'message' => 'Missing or invalid fields']);
-    exit;
-}
 
 function h($s) {
     return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 }
 
-if ($lang === 'fa') {
+if ($type === 'volunteer') {
+    if (!$to || !filter_var($to, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Missing or invalid fields']);
+        exit;
+    }
+
+    if ($lang === 'fa') {
+        $subject = "متشکریم از داوطلبی شما — انجمن پل فرهنگی تارا";
+        $greeting = $volunteerName ? "سلام " . h($volunteerName) . "،" : "سلام،";
+        $bodyHtml = "<div dir='rtl' style='font-family:Tahoma,Arial,sans-serif;line-height:1.8;color:#222;'>"
+            . "<p>{$greeting}</p>"
+            . "<p>از اینکه برای داوطلب شدن در انجمن پل فرهنگی تارا اعلام آمادگی کردید سپاسگزاریم.</p>"
+            . "<p>تیم ما به‌زودی با شما تماس خواهد گرفت.</p>"
+            . "<p style='color:#777;font-size:13px;margin-top:24px;'>انجمن پل فرهنگی تارا</p>"
+            . "</div>";
+    } else {
+        $subject = "Thank you for volunteering — Tara Cultural Bridge Society";
+        $greeting = $volunteerName ? "Hi " . h($volunteerName) . "," : "Hi,";
+        $bodyHtml = "<div style='font-family:Arial,sans-serif;line-height:1.6;color:#222;'>"
+            . "<p>{$greeting}</p>"
+            . "<p>Thank you for signing up to volunteer with Tara Cultural Bridge Society.</p>"
+            . "<p>Our team will contact you soon.</p>"
+            . "<p style='color:#777;font-size:13px;margin-top:24px;'>Tara Cultural Bridge Society</p>"
+            . "</div>";
+    }
+} else {
+    if (!$to || !filter_var($to, FILTER_VALIDATE_EMAIL) || $eventTitle === '') {
+        http_response_code(400);
+        echo json_encode(['status' => 'error', 'message' => 'Missing or invalid fields']);
+        exit;
+    }
+
+    if ($lang === 'fa') {
     $subject = "تأیید ثبت‌نام: {$eventTitle}";
     $greeting = $parentName ? "سلام " . h($parentName) . "،" : "سلام،";
     $rows = "";
@@ -81,6 +110,7 @@ if ($lang === 'fa') {
         . "<p>We look forward to seeing you there!</p>"
         . "<p style='color:#777;font-size:13px;margin-top:24px;'>Tara Cultural Bridge Society</p>"
         . "</div>";
+    }
 }
 
 function sendViaSmtp2goApi($apiKey, $fromEmail, $fromName, $to, $subject, $htmlBody) {

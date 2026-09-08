@@ -74,6 +74,7 @@
         <h2 class="section-title" data-i18n="about_title">About Tara</h2>
         <p data-i18n="about_p1">Tara Cultural Bridge Society is a North Shore nonprofit dedicated to strengthening belonging, connection, and participation among families from diverse cultural backgrounds, particularly newcomers and first- and second-generation immigrants. Tara targets families with children, and seniors, and it creates programs, cultural celebrations, workshops, arts activities, and community gatherings that bring people together across cultures and generations. It also builds partnerships with local organizations and community resources to help families connect with services, opportunities, and the wider community.</p>
         <p data-i18n="about_p2">Tara believes that cultural heritage can be a bridge rather than a boundary. By creating welcoming spaces where families can share traditions, discover other cultures, and participate in community life, Tara seeks to foster inclusion, intercultural understanding, stronger community bonds, a deeper sense of home and belonging, and an improved quality of life.</p>
+        <p data-i18n="about_founders">Tara was founded by Farzaneh Ghassemi, who brings a background in art education, and Fatemeh Gholamreza Kashi, who brings a background in sociology — a pairing that shapes Tara's approach of blending creative, hands-on programming with a deep understanding of community and belonging.</p>
       </div>
     </div>
   </div>
@@ -235,6 +236,7 @@ const TRANSLATIONS = {
     about_eyebrow:"Who We Are", about_title:"About Tara",
     about_p1:"Tara Cultural Bridge Society is a North Shore nonprofit dedicated to strengthening belonging, connection, and participation among families from diverse cultural backgrounds, particularly newcomers and first- and second-generation immigrants. Tara targets families with children, and seniors, and it creates programs, cultural celebrations, workshops, arts activities, and community gatherings that bring people together across cultures and generations. It also builds partnerships with local organizations and community resources to help families connect with services, opportunities, and the wider community.",
     about_p2:"Tara believes that cultural heritage can be a bridge rather than a boundary. By creating welcoming spaces where families can share traditions, discover other cultures, and participate in community life, Tara seeks to foster inclusion, intercultural understanding, stronger community bonds, a deeper sense of home and belonging, and an improved quality of life.",
+    about_founders:"Tara was founded by Farzaneh Ghassemi, who brings a background in art education, and Fatemeh Gholamreza Kashi, who brings a background in sociology — a pairing that shapes Tara's approach of blending creative, hands-on programming with a deep understanding of community and belonging.",
     stat_years:"Years Active", stat_events:"Events / Year", stat_members:"Community Members",
     mission_eyebrow:"Values & Mission", mission_title:"What guides our work",
     mission_lede:"Three ideas sit behind every program we run — they're what we check new ideas against before we build them.",
@@ -273,6 +275,7 @@ const TRANSLATIONS = {
     about_eyebrow:"ما که هستیم", about_title:"درباره تارا",
     about_p1:"انجمن پل فرهنگی تارا یک سازمان غیرانتفاعی در نورث‌شور است که به تقویت حس تعلق، پیوند و مشارکت خانواده‌هایی با پیشینه‌های فرهنگی گوناگون اختصاص دارد، به‌ویژه تازه‌واردان و مهاجران نسل اول و دوم. تارا خانواده‌های دارای فرزند و سالمندان را هدف قرار می‌دهد و برنامه‌ها، جشن‌های فرهنگی، کارگاه‌ها، فعالیت‌های هنری و گردهمایی‌های اجتماعی برگزار می‌کند که مردم را از فرهنگ‌ها و نسل‌های مختلف گرد هم می‌آورد. این انجمن همچنین با سازمان‌ها و منابع محلی همکاری می‌کند تا خانواده‌ها را به خدمات، فرصت‌ها و جامعه گسترده‌تر متصل کند.",
     about_p2:"تارا باور دارد که میراث فرهنگی می‌تواند پلی باشد، نه مرزی. با ایجاد فضاهایی گرم که در آن خانواده‌ها می‌توانند سنت‌های خود را به اشتراک بگذارند، با فرهنگ‌های دیگر آشنا شوند و در زندگی اجتماعی مشارکت کنند، تارا در پی تقویت همبستگی، درک بین‌فرهنگی، پیوندهای اجتماعی قوی‌تر، حس عمیق‌تری از خانه و تعلق، و بهبود کیفیت زندگی است.",
+    about_founders:"تارا توسط فرزانه قاسمی، با پیشینه‌ای در آموزش هنر، و فاطمه غلامرضا کاشی، با پیشینه‌ای در جامعه‌شناسی، بنیان‌گذاری شده است — ترکیبی که رویکرد تارا در پیوند دادن برنامه‌های خلاقانه و عملی با درکی عمیق از جامعه و تعلق را شکل می‌دهد.",
     stat_years:"سال فعالیت", stat_events:"رویداد در سال", stat_members:"عضو جامعه",
     mission_eyebrow:"ارزش‌ها و مأموریت", mission_title:"آنچه کار ما را هدایت می‌کند",
     mission_lede:"سه ایده پشت هر برنامه‌ای که اجرا می‌کنیم قرار دارد — معیار ما پیش از ساختن هر ایده تازه.",
@@ -542,6 +545,7 @@ document.getElementById("volunteerForm").addEventListener("submit", async functi
   const msgEl = document.getElementById("volMsg");
   try{
     await sendToSheet({ type: "volunteer", name, email, interest, message });
+    sendConfirmationEmail({ type: "volunteer", to: email, name, lang: currentLang });
     msgEl.textContent = t("reg_success");
     msgEl.className = "reg-msg ok";
     e.target.reset();
