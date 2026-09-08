@@ -23,7 +23,7 @@
   }
   html[dir="rtl"] body{ font-family: var(--farsi); }
   a{ color: inherit; }
-  img{ max-width:100%; display:block; }
+  img{ max-width:100%; display:block; height:auto; }
   .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 28px; }
   button{ font-family: inherit; cursor: pointer; }
 
@@ -209,7 +209,7 @@
 
   footer{ padding: 48px 0; }
   .footer-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
-  .footer-row img{ height:30px; }
+  .footer-row img{ height:30px; width:auto; }
   .footer-meta{ font-family: var(--mono); font-size:11.5px; color: var(--ink-soft); }
   html[dir="rtl"] .footer-meta{ font-family: var(--farsi); font-size:13px; }
 
