@@ -4,9 +4,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tara Cultural Bridge Society</title>
-<meta name="description" content="Tara Cultural Bridge Society is a North Shore nonprofit connecting communities through shared language, heritage, cultural events, and everyday support for newcomers and longtime neighbors alike.">
-<link rel="canonical" href="https://tarabridge.ca/">
+<title id="pageTitle">Tara Cultural Bridge Society</title>
+<meta id="metaDescription" name="description" content="Tara Cultural Bridge Society is a North Shore nonprofit connecting communities through shared language, heritage, cultural events, and everyday support for newcomers and longtime neighbors alike.">
+<link rel="canonical" id="canonicalLink" href="https://tarabridge.ca/">
+<link rel="alternate" hreflang="en" href="https://tarabridge.ca/">
+<link rel="alternate" hreflang="fa" href="https://tarabridge.ca/?lang=fa">
+<link rel="alternate" hreflang="x-default" href="https://tarabridge.ca/">
 <link rel="icon" type="image/jpeg" href="images/logo.jpg">
 <script type="application/ld+json">
 {
@@ -27,222 +30,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --teal: #28716E;
-    --orange: #C97319;
-    --terracotta: #BD3A12;
-    --maroon: #77182C;
-    --ink: #33291F;
-    --ink-soft: #6B6155;
-    --paper: #EFE4DA;
-    --paper-raised: #FAF5EE;
-    --line: rgba(51,41,31,0.15);
-    --display: "Baloo 2", sans-serif;
-    --body: "Inter", system-ui, sans-serif;
-    --farsi: "Vazirmatn", sans-serif;
-    --mono: "IBM Plex Mono", ui-monospace, monospace;
-    --radius: 14px;
-  }
-  *{ box-sizing: border-box; }
-  html{ scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
-  body{
-    margin:0; background: var(--paper); color: var(--ink);
-    font-family: var(--body); line-height:1.55;
-  }
-  html[dir="rtl"] body{ font-family: var(--farsi); }
-  a{ color: inherit; }
-  img{ max-width:100%; display:block; }
-  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 28px; }
-  button{ font-family: inherit; cursor: pointer; }
-
-  body::before{
-    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.5;
-    background-image: radial-gradient(circle at 1px 1px, rgba(51,41,31,0.05) 1px, transparent 0);
-    background-size: 3px 3px;
-  }
-  section, header, footer{ position:relative; z-index:1; }
-
-  .nav{
-    position: sticky; top:0; z-index: 60;
-    background: rgba(239,228,218,0.94); backdrop-filter: blur(6px);
-    border-bottom: 1px solid var(--line);
-  }
-  .nav-row{ display:flex; align-items:center; justify-content:space-between; height:72px; gap:20px; }
-  .nav-brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
-  .nav-brand img{ height:40px; width:auto; }
-  .nav-links{ display:flex; gap:4px; list-style:none; margin:0; padding:0; flex-wrap:wrap; }
-  .nav-links a{
-    font-family: var(--mono); font-size:12.5px; letter-spacing:0.04em; text-transform:uppercase;
-    text-decoration:none; color: var(--ink-soft); padding:8px 12px; border-radius:8px;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  html[dir="rtl"] .nav-links a{ font-family: var(--farsi); text-transform:none; font-size:14px; }
-  .nav-links a:hover{ background: rgba(51,41,31,0.08); color: var(--ink); }
-  .nav-right{ display:flex; align-items:center; gap:12px; }
-  .lang-btn{
-    font-family: var(--mono); font-size:12.5px; letter-spacing:0.05em;
-    background: var(--ink); color: var(--paper); border:none; padding:9px 16px;
-    border-radius:8px; font-weight:600;
-  }
-  .donate-btn{
-    font-family: var(--mono); font-size:12.5px; letter-spacing:0.05em; text-transform:uppercase;
-    background: var(--terracotta); color:#fff; border:none; padding:9px 16px; border-radius:8px; font-weight:600;
-    text-decoration:none;
-  }
-  html[dir="rtl"] .donate-btn{ font-family: var(--farsi); text-transform:none; font-size:14px; }
-  .nav-toggle{ display:none; background:none; border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
-  @media (max-width: 900px){
-    .nav-links{ display:none; }
-    .nav-toggle{ display:inline-flex; }
-    .nav-links.open{
-      display:flex; flex-direction:column; position:absolute; top:72px; left:0; right:0;
-      background: var(--paper-raised); padding:12px 28px 20px; border-bottom:1px solid var(--line);
-    }
-  }
-
-  .hero{ padding: 76px 0 64px; text-align:center; border-bottom: 1px solid var(--line); }
-  .hero img.hero-logo{ max-width: 340px; margin: 0 auto 20px; }
-  .hero h1{
-    font-family: var(--display); font-weight:700; font-size: clamp(30px,4.6vw,50px);
-    margin: 0 0 16px; color: var(--ink);
-  }
-  html[dir="rtl"] .hero h1{ font-family: var(--farsi); font-weight:700; }
-  .hero p{ max-width: 56ch; margin: 0 auto; color: var(--ink-soft); font-size:17px; }
-  .hero-ctas{ display:flex; gap:14px; justify-content:center; margin-top:32px; flex-wrap:wrap; }
-  .btn{
-    font-weight:600; font-size:14.5px; padding:13px 26px; border-radius:999px; text-decoration:none;
-    display:inline-flex; align-items:center; gap:8px; border: 2px solid var(--ink);
-  }
-  .btn-solid{ background: var(--ink); color: var(--paper); }
-  .btn-outline{ background:transparent; color:var(--ink); }
-
-  section.page-section{ padding: 84px 0; border-bottom: 1px solid var(--line); }
-  .section-eyebrow{
-    font-family: var(--mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase;
-    color: var(--terracotta); margin-bottom:12px;
-  }
-  html[dir="rtl"] .section-eyebrow{ font-family: var(--farsi); text-transform:none; letter-spacing:0; font-size:14px; font-weight:600; }
-  .section-title{
-    font-family: var(--display); font-weight:700; font-size: clamp(26px,3.4vw,38px);
-    margin: 0 0 20px; color: var(--ink);
-  }
-  html[dir="rtl"] .section-title{ font-family: var(--farsi); }
-  .section-lede{ max-width: 68ch; color: var(--ink-soft); font-size:16px; margin-bottom: 48px; }
-
-  .values-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:24px; }
-  @media (max-width:800px){ .values-grid{ grid-template-columns:1fr; } }
-  .value-card{
-    background: var(--paper-raised); border:1px solid var(--line); border-radius: var(--radius);
-    padding: 28px; border-top: 4px solid var(--teal);
-  }
-  .value-card:nth-child(2){ border-top-color: var(--orange); }
-  .value-card:nth-child(3){ border-top-color: var(--maroon); }
-  .value-card h3{ font-family: var(--display); font-size:20px; margin:0 0 10px; }
-  html[dir="rtl"] .value-card h3{ font-family: var(--farsi); }
-  .value-card p{ color: var(--ink-soft); font-size:14.5px; margin:0; }
-
-  .programs-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap:22px; }
-  @media (max-width:800px){ .programs-grid{ grid-template-columns:1fr; } }
-  .program-card{
-    background: var(--paper-raised); border:1px solid var(--line); border-radius: var(--radius);
-    padding: 26px; display:flex; gap:18px;
-  }
-  .program-icon{
-    width:48px; height:48px; border-radius:50%; flex:none;
-    display:flex; align-items:center; justify-content:center;
-    font-size:22px; background: var(--paper);
-  }
-  .program-card h3{ font-family: var(--display); font-size:18px; margin:0 0 8px; }
-  html[dir="rtl"] .program-card h3{ font-family: var(--farsi); }
-  .program-card p{ color: var(--ink-soft); font-size:14px; margin:0; }
-
-  .events-list{ display:flex; flex-direction:column; gap:18px; }
-  .event-card{
-    background: var(--paper-raised); border:1px solid var(--line); border-radius: var(--radius);
-    padding: 22px; display:grid; grid-template-columns: 84px 1fr auto; gap:22px; align-items:center;
-  }
-  @media (max-width:720px){ .event-card{ grid-template-columns: 64px 1fr; } .event-card .event-action{ grid-column:1/-1; } }
-  .event-date{
-    background: var(--ink); color: var(--paper); border-radius:10px; text-align:center; padding:10px 6px;
-  }
-  .event-date .day{ font-family: var(--display); font-size:24px; line-height:1; display:block; }
-  .event-date .mon{ font-family: var(--mono); font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; display:block; margin-top:4px; }
-  .event-info h3{ font-family: var(--display); font-size:19px; margin:0 0 6px; }
-  html[dir="rtl"] .event-info h3{ font-family: var(--farsi); }
-  .event-meta{ font-family: var(--mono); font-size:12px; color: var(--ink-soft); display:flex; gap:14px; flex-wrap:wrap; margin-bottom:8px; }
-  html[dir="rtl"] .event-meta{ font-family: var(--farsi); font-size:13.5px; }
-  .event-desc{ color: var(--ink-soft); font-size:14px; margin:0; }
-  .event-tag{
-    display:inline-block; font-family: var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase;
-    background: rgba(40,113,110,0.14); color: var(--teal); padding:3px 9px; border-radius:999px; margin-bottom:8px;
-  }
-  .spots{ font-family: var(--mono); font-size:11.5px; color: var(--ink-soft); margin-top:6px; }
-  .spots.full{ color: var(--maroon); font-weight:600; }
-  .btn-register{
-    font-weight:600; font-size:13.5px; padding:10px 20px; border-radius:999px; border:2px solid var(--ink);
-    background: var(--ink); color:var(--paper); white-space:nowrap;
-  }
-  .btn-register:disabled{ background:transparent; color: var(--ink-soft); border-color: var(--line); cursor:not-allowed; }
-
-  .reg-form{
-    margin-top:16px; padding-top:16px; border-top:1px dashed var(--line);
-    display:none; grid-template-columns: 1fr 1fr; gap:12px;
-  }
-  .reg-form.open{ display:grid; }
-  .reg-form input, .reg-form textarea{
-    grid-column: span 1; font-family:inherit; font-size:14px; padding:10px 12px;
-    border:1px solid var(--line); border-radius:8px; background:#fff; color: var(--ink); width:100%;
-  }
-  .reg-form textarea{ grid-column: 1/-1; resize:vertical; min-height:60px; }
-  .reg-form .reg-submit{ grid-column: 1/-1; justify-self:start; }
-  .reg-msg{ grid-column:1/-1; font-size:13px; font-family: var(--mono); }
-  .reg-msg.ok{ color: var(--teal); }
-  .reg-msg.err{ color: var(--maroon); }
-
-  .donate-grid{ display:grid; grid-template-columns: 1.1fr 1fr; gap:40px; align-items:center; }
-  @media (max-width:800px){ .donate-grid{ grid-template-columns:1fr; } }
-  .donate-tiers{ display:flex; gap:14px; flex-wrap:wrap; margin-top:24px; }
-  .tier-btn{
-    flex:1; min-width:110px; background: var(--paper-raised); border:2px solid var(--line); border-radius:12px;
-    padding:18px 10px; text-align:center; font-family: var(--display); font-size:20px; font-weight:700;
-  }
-  .tier-btn:hover{ border-color: var(--terracotta); }
-  html[dir="rtl"] .tier-btn{ font-family: var(--farsi); }
-  .donate-note{ font-size:12.5px; color: var(--ink-soft); margin-top:14px; }
-  .donate-art{
-    background: var(--paper-raised); border:1px solid var(--line); border-radius: var(--radius);
-    padding: 40px; text-align:center;
-  }
-
-  .volunteer-form{
-    display:grid; grid-template-columns: 1fr 1fr; gap:16px; max-width: 640px;
-    background: var(--paper-raised); border:1px solid var(--line); border-radius: var(--radius); padding: 32px;
-  }
-  .volunteer-form label{ font-family: var(--mono); font-size:11.5px; letter-spacing:0.05em; text-transform:uppercase; color: var(--ink-soft); display:block; margin-bottom:6px; }
-  html[dir="rtl"] .volunteer-form label{ font-family: var(--farsi); text-transform:none; font-size:13px; }
-  .volunteer-form input, .volunteer-form select, .volunteer-form textarea{
-    width:100%; font-family:inherit; font-size:14.5px; padding:11px 12px; border:1px solid var(--line);
-    border-radius:8px; background:#fff; color: var(--ink);
-  }
-  .volunteer-form .full{ grid-column: 1/-1; }
-  @media (max-width:600px){ .volunteer-form{ grid-template-columns:1fr; } }
-
-  .about-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:48px; align-items:start; }
-  @media (max-width:800px){ .about-grid{ grid-template-columns:1fr; } }
-  .about-grid p{ color: var(--ink-soft); font-size:16px; margin: 0 0 16px; }
-  .stat-row{ display:flex; gap:28px; margin-top: 24px; flex-wrap:wrap; }
-  .stat b{ font-family: var(--display); font-size: 30px; display:block; color: var(--terracotta); }
-  .stat span{ font-family: var(--mono); font-size:11px; color: var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em; }
-  html[dir="rtl"] .stat span{ font-family: var(--farsi); text-transform:none; font-size:12.5px; }
-
-  footer{ padding: 48px 0; }
-  .footer-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
-  .footer-row img{ height:30px; }
-  .footer-meta{ font-family: var(--mono); font-size:11.5px; color: var(--ink-soft); }
-  html[dir="rtl"] .footer-meta{ font-family: var(--farsi); font-size:13px; }
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -437,6 +225,8 @@ async function sendConfirmationEmail(payload){
 
 const TRANSLATIONS = {
   en: {
+    meta_title:"Tara Cultural Bridge Society",
+    meta_description:"Tara Cultural Bridge Society is a North Shore nonprofit connecting communities through shared language, heritage, cultural events, and everyday support for newcomers and longtime neighbors alike.",
     nav_about:"About Us", nav_mission:"Values & Mission", nav_events:"Events",
     nav_volunteer:"Volunteer", nav_donate:"Donate", nav_contact:"Contact",
     hero_title:"Building bridges between cultures",
@@ -473,6 +263,8 @@ const TRANSLATIONS = {
     lang_toggle_label:"فارسی"
   },
   fa: {
+    meta_title:"انجمن پل فرهنگی تارا",
+    meta_description:"انجمن پل فرهنگی تارا یک سازمان غیرانتفاعی در نورث‌شور است که جوامع را از طریق زبان مشترک، میراث فرهنگی، رویدادهای فرهنگی و حمایت روزمره برای تازه‌واردان و همسایگان قدیمی به هم پیوند می‌دهد.",
     nav_about:"درباره ما", nav_mission:"ارزش‌ها و مأموریت", nav_events:"رویدادها",
     nav_volunteer:"داوطلب شوید", nav_donate:"کمک مالی", nav_contact:"تماس با ما",
     hero_title:"ساختن پل میان فرهنگ‌ها",
@@ -612,7 +404,7 @@ async function renderEvents(){
       <div class="event-date"><span class="day">${dateParts.day}</span><span class="mon">${dateParts.mon}</span></div>
       <div class="event-info">
         <div class="event-tag">${ev.program}</div>
-        <h3><a href="events/${ev.id}.html" style="color:inherit;text-decoration:none;">${currentLang==="fa" ? ev.title_fa : ev.title_en}</a></h3>
+        <h3><a href="events/${ev.id}.html${currentLang==="fa" ? "?lang=fa" : ""}" style="color:inherit;text-decoration:none;">${currentLang==="fa" ? ev.title_fa : ev.title_en}</a></h3>
         <div class="event-meta"><span>🕔 ${currentLang==="fa" && ev.time_fa ? ev.time_fa : ev.time}</span><span>📍 ${currentLang==="fa" ? ev.loc_fa : ev.loc_en}</span></div>
         <p class="event-desc">${currentLang==="fa" ? ev.desc_fa : ev.desc_en}</p>
         <form class="reg-form" data-event="${ev.id}">
@@ -713,18 +505,30 @@ function updateEventsStructuredData(sortedEvents){
   document.head.appendChild(script);
 }
 
-function setLanguage(lang){
+function setLanguage(lang, updateUrl){
   currentLang = lang;
   const html = document.getElementById("htmlRoot");
   html.setAttribute("lang", lang);
   html.setAttribute("dir", lang === "fa" ? "rtl" : "ltr");
   document.getElementById("langBtn").textContent = t("lang_toggle_label");
+  document.getElementById("pageTitle").textContent = t("meta_title");
+  document.getElementById("metaDescription").setAttribute("content", t("meta_description"));
+  document.getElementById("canonicalLink").setAttribute(
+    "href",
+    lang === "fa" ? "https://tarabridge.ca/?lang=fa" : "https://tarabridge.ca/"
+  );
+  if(updateUrl){
+    const url = new URL(location.href);
+    if(lang === "fa"){ url.searchParams.set("lang", "fa"); }
+    else{ url.searchParams.delete("lang"); }
+    history.replaceState(null, "", url);
+  }
   applyStaticTranslations();
   renderEvents();
 }
 
 document.getElementById("langBtn").addEventListener("click", function(){
-  setLanguage(currentLang === "en" ? "fa" : "en");
+  setLanguage(currentLang === "en" ? "fa" : "en", true);
 });
 document.getElementById("navToggle").addEventListener("click", function(){
   document.getElementById("navLinks").classList.toggle("open");
@@ -747,7 +551,8 @@ document.getElementById("volunteerForm").addEventListener("submit", async functi
   }
 });
 
-setLanguage("en");
+const initialLang = new URLSearchParams(location.search).get("lang") === "fa" ? "fa" : "en";
+setLanguage(initialLang, false);
 loadEvents().then(renderEvents);
 </script>
 </body>
