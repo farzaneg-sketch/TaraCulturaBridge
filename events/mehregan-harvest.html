@@ -34,6 +34,13 @@
   .hg-note{ background: var(--paper-raised); border-inline-start:4px solid var(--terracotta); border-radius: 0 var(--radius) var(--radius) 0; padding:16px 18px; }
   html[dir="rtl"] .hg-note{ border-radius: var(--radius) 0 0 var(--radius); }
   .hg-note p:last-child{ margin-bottom:0; }
+  .hg-note + .hg-note{ margin-top:14px; }
+  .hg-note h3{ font-size:16px; font-weight:700; margin:0 0 8px; color: var(--maroon); }
+  .hg-list, .hg-note ul{ margin:0 0 20px; padding-inline-start:20px; }
+  .hg-note ul{ margin-bottom:0; }
+  .hg-list li, .hg-note li{ font-size:15.5px; margin:0 0 10px; }
+  .hg-note li:last-child{ margin-bottom:0; }
+  .hg-list strong{ color: var(--maroon); }
   .hg-poster{ position:sticky; top:24px; }
   .hg-poster a{ display:block; border-radius: var(--radius); overflow:hidden; box-shadow: 0 10px 30px rgba(51,41,31,.18); }
   .hg-poster figcaption{ font-family: var(--mono); font-size:12px; color: var(--ink-soft); margin-top:10px; text-align:center; }
@@ -83,9 +90,29 @@
         <div class="hg-about">
           <h2 id="aboutTitle">About the Workshop</h2>
           <div id="aboutBody">
-            <p>Harvest &amp; Gratitude is a shared harvest celebration that brings together Thanksgiving traditions with the Harvest Festival (Jashn-e-Barshat) traditions of northern Iran. During this hands-on workshop, children will take a journey through stories and traditions from both celebrations. Along the way, they will create their own gratitude crafts—such as a rice doll or a “thanks” leaf—inspired by what they learn. The children will then work together to create and perform a short collaborative drama based on the story they heard, using a cardboard stage and decorations provided for the workshop and enhanced with their new handmade crafts. The celebration will conclude with a small snack and a short traditional dance from northern Iran, reflecting the dancing that commonly follows harvest celebrations.</p>
-            <div class="hg-note">
-              <p>This is a children-only workshop for ages 5–10. Parents and guardians are not part of the workshop activities, but we ask that they remain nearby and be available to assist promptly if their child needs them. A waiver and release form will be sent to the guardian by email the night before the workshop. A signed form is required for every participating child before they can take part.</p>
+            <ul class="hg-list" id="aboutList">
+              <li><strong>A shared harvest celebration:</strong> Explore the connection between Thanksgiving and the Harvest Festival (Jashn-e Barshat) traditions of northern Iran.</li>
+              <li><strong>Storytelling journey:</strong> Children will go on a storytelling journey through the traditions, ceremonies, and stories connected to both celebrations.</li>
+              <li><strong>Gratitude craft:</strong> Inspired by the stories, each child will create an element of gratitude, such as a rice doll or a “Thanks” leaf.</li>
+              <li><strong>Cardboard scenery &amp; props:</strong> Children will use a handmade cardboard setting—including trees, houses, kitchen and cooking elements, and a feast/harvest scene—to bring their story to life during the collaborative drama.</li>
+              <li><strong>Collaborative drama:</strong> Working together, children will create and perform a short drama based on the story they heard, incorporating the cardboard scenery and the crafts they have made.</li>
+              <li><strong>Harvest celebration:</strong> The workshop will end with a small snack and a short traditional dance from northern Iran, reflecting the dancing that commonly follows harvest celebrations.</li>
+            </ul>
+            <div class="hg-note" id="kidsNote">
+              <h3>👧🧒 For Children Ages 5–10</h3>
+              <ul>
+                <li>This is a children-only workshop.</li>
+                <li>Parents and guardians will not participate in the workshop activities.</li>
+                <li>Parents/guardians are asked to remain nearby and be available in case their child needs assistance.</li>
+              </ul>
+            </div>
+            <div class="hg-note" id="parentsNote">
+              <h3>📋 Important for Parents &amp; Guardians</h3>
+              <ul>
+                <li>A waiver and release form will be emailed to the child's guardian the night before the workshop.</li>
+                <li>A signed waiver is required for every participating child before they can take part.</li>
+                <li>Please make sure you are available to respond promptly if your child needs you during the workshop.</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -147,8 +174,24 @@ const TEXT = {
     summary: "کارگاهی عملی برای کودکان ۵ تا ۱۰ سال در جشن شکرگزاری و جشن برداشت شمال ایران؛ با قصه‌گویی، ساخت کاردستی‌های سپاسگزاری، یک نمایش کوتاه گروهی و یک رقص سنتی.",
     aboutTitle: "درباره کارگاه",
     about: [
-      "«برداشت و سپاسگزاری» جشنی مشترک از برداشت است که سنت‌های روز شکرگزاری را با سنت‌های جشن برداشت شمال ایران پیوند می‌دهد. در این کارگاه عملی، کودکان سفری به دنیای قصه‌ها و سنت‌های هر دو جشن خواهند داشت. در این مسیر، با الهام از آنچه یاد می‌گیرند، کاردستی‌های سپاسگزاری خودشان را می‌سازند؛ مانند «عروسک برنج» یا «برگ سپاس». سپس کودکان با همکاری یکدیگر، نمایش کوتاهی بر اساس قصه‌ای که شنیده‌اند می‌سازند و اجرا می‌کنند؛ با استفاده از صحنه و تزئینات مقوایی که برای کارگاه فراهم شده و با کاردستی‌هایی که خودشان ساخته‌اند. جشن با یک پذیرایی مختصر و یک رقص کوتاه سنتی از شمال ایران به پایان می‌رسد؛ یادآور رقص و پایکوبی‌ای که معمولاً پس از جشن‌های برداشت برپا می‌شود.",
-      "این کارگاه فقط برای کودکان ۵ تا ۱۰ سال است. والدین و سرپرستان در فعالیت‌های کارگاه شرکت نمی‌کنند، اما از آن‌ها می‌خواهیم در نزدیکی محل کارگاه بمانند و در صورت نیاز کودک، سریعاً در دسترس باشند. فرم رضایت‌نامه و سلب مسئولیت، شب پیش از کارگاه به ایمیل سرپرست ارسال می‌شود. برای شرکت هر کودک، داشتن فرم امضاشده الزامی است."
+      ["جشنی مشترک برای برداشت:", "با پیوند میان روز شکرگزاری و سنت‌های جشن برداشت شمال ایران آشنا شوید."],
+      ["سفری قصه‌گویانه:", "کودکان سفری قصه‌گویانه به دنیای سنت‌ها، آیین‌ها و داستان‌های مرتبط با هر دو جشن خواهند داشت."],
+      ["کاردستی سپاسگزاری:", "هر کودک با الهام از قصه‌ها، نمادی از سپاسگزاری می‌سازد؛ مانند «عروسک برنج» یا «برگ سپاس»."],
+      ["صحنه و وسایل مقوایی:", "کودکان با استفاده از صحنه‌ای مقوایی و دست‌ساز — شامل درختان، خانه‌ها، آشپزخانه و وسایل آشپزی، و صحنه‌ای از جشن و برداشت — قصه را در نمایش گروهی جان می‌بخشند."],
+      ["نمایش گروهی:", "کودکان با همکاری یکدیگر، نمایش کوتاهی بر اساس قصه‌ای که شنیده‌اند می‌سازند و اجرا می‌کنند و در آن از صحنه‌آرایی مقوایی و کاردستی‌های خودشان استفاده می‌کنند."],
+      ["جشن برداشت:", "کارگاه با یک پذیرایی مختصر و یک رقص کوتاه سنتی از شمال ایران به پایان می‌رسد؛ یادآور رقص و پایکوبی‌ای که معمولاً پس از جشن‌های برداشت برپا می‌شود."]
+    ],
+    kidsTitle: "👧🧒 برای کودکان ۵ تا ۱۰ سال",
+    kids: [
+      "این کارگاه فقط برای کودکان است.",
+      "والدین و سرپرستان در فعالیت‌های کارگاه شرکت نمی‌کنند.",
+      "از والدین و سرپرستان می‌خواهیم در نزدیکی محل کارگاه بمانند تا در صورت نیاز کودک در دسترس باشند."
+    ],
+    parentsTitle: "📋 نکات مهم برای والدین و سرپرستان",
+    parents: [
+      "فرم رضایت‌نامه و سلب مسئولیت، شب پیش از کارگاه به ایمیل سرپرست کودک ارسال می‌شود.",
+      "برای شرکت هر کودک، داشتن رضایت‌نامه امضاشده الزامی است.",
+      "لطفاً در طول کارگاه در دسترس باشید تا اگر کودکتان به شما نیاز داشت، سریعاً پاسخ دهید."
     ],
     regTitle: "ثبت‌نام",
     ph: {
@@ -180,9 +223,15 @@ function applyFarsi(){
   document.querySelectorAll("#chips li").forEach((li, i) => { li.textContent = f.chips[i]; });
   document.getElementById("summary").textContent = f.summary;
   document.getElementById("aboutTitle").textContent = f.aboutTitle;
-  const body = document.getElementById("aboutBody");
-  body.querySelector("p").textContent = f.about[0];
-  body.querySelector(".hg-note p").textContent = f.about[1];
+  document.querySelectorAll("#aboutList li").forEach((li, i) => {
+    const b = document.createElement("strong");
+    b.textContent = f.about[i][0];
+    li.replaceChildren(b, " " + f.about[i][1]);
+  });
+  document.querySelector("#kidsNote h3").textContent = f.kidsTitle;
+  document.querySelectorAll("#kidsNote li").forEach((li, i) => { li.textContent = f.kids[i]; });
+  document.querySelector("#parentsNote h3").textContent = f.parentsTitle;
+  document.querySelectorAll("#parentsNote li").forEach((li, i) => { li.textContent = f.parents[i]; });
   document.getElementById("regTitle").textContent = f.regTitle;
   const form = document.getElementById("regForm");
   for (const k in f.ph) form.querySelector(".reg-" + k).placeholder = f.ph[k];
