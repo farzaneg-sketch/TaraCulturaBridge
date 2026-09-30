@@ -31,6 +31,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<style>
+  .event-thumb{ display:block; position:relative; border-radius:10px; overflow:hidden; box-shadow:0 4px 12px rgba(51,41,31,.18); }
+  .event-thumb img{ width:100%; aspect-ratio:2/3; object-fit:cover; display:block; }
+  .event-thumb-date{ position:absolute; left:0; right:0; bottom:0; background:rgba(51,41,31,.85); color:var(--paper); font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; text-align:center; padding:3px 2px; }
+  html[dir="rtl"] .event-thumb-date{ font-family:var(--farsi); letter-spacing:0; }
+  .event-card.has-thumb{ grid-template-columns: 110px 1fr auto; }
+  @media (max-width:720px){ .event-card.has-thumb{ grid-template-columns: 84px 1fr; } }
+</style>
 </head>
 <body>
 
@@ -193,7 +201,7 @@
 <footer>
   <div class="wrap footer-row">
     <img width="700" height="700" src="images/logo.jpg" alt="Tara Cultural Bridge Society">
-    <div class="footer-meta" data-i18n="footer_text">© 2026 Tara Cultural Bridge Society — hello@taracbs.org</div>
+    <div class="footer-meta" data-i18n="footer_text">© 2026 Tara Cultural Bridge Society — info@tarabridge.ca</div>
   </div>
 </footer>
 
@@ -256,7 +264,7 @@ const TRANSLATIONS = {
     contact_eyebrow:"Get in Touch", contact_title:"Contact Us",
     contact_lede:"Questions, ideas, or just want to say hello? Reach us here.",
     contact_email_label:"Email", contact_phone_label:"Phone", contact_instagram_label:"Instagram",
-    footer_text:"© 2026 Tara Cultural Bridge Society — hello@taracbs.org",
+    footer_text:"© 2026 Tara Cultural Bridge Society — info@tarabridge.ca",
     register:"Register", cancel:"Cancel", registered:"Registered ✓", full:"Full", spots_left:"spots left",
     reg_kidName:"Child's name", reg_kidAge:"Child's age", reg_parentName:"Parent's name",
     reg_email:"Email", reg_phone:"Phone", reg_allergy:"Allergies (write “None” if none)",
@@ -295,7 +303,7 @@ const TRANSLATIONS = {
     contact_eyebrow:"در تماس باشید", contact_title:"تماس با ما",
     contact_lede:"سؤال یا ایده‌ای دارید یا فقط می‌خواهید سلام کنید؟ از این طریق با ما در ارتباط باشید.",
     contact_email_label:"ایمیل", contact_phone_label:"تلفن", contact_instagram_label:"اینستاگرام",
-    footer_text:"© ۲۰۲۶ انجمن پل فرهنگی تارا — hello@taracbs.org",
+    footer_text:"© ۲۰۲۶ انجمن پل فرهنگی تارا — info@tarabridge.ca",
     register:"ثبت‌نام", cancel:"انصراف", registered:"ثبت‌نام شد ✓", full:"تکمیل ظرفیت", spots_left:"جای خالی",
     reg_kidName:"نام کودک", reg_kidAge:"سن کودک", reg_parentName:"نام والد",
     reg_email:"ایمیل", reg_phone:"تلفن", reg_allergy:"حساسیت غذایی (در صورت نبود «ندارد» بنویسید)",
@@ -379,11 +387,18 @@ function applyStaticTranslations(){
 }
 
 function formatDate(iso, lang){
-  const d = new Date(iso + "T00:00:00");
+  const d = new Date(String(iso).slice(0,10) + "T00:00:00");
   const monthsEn = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
   const monthsFa = ["ژانویه","فوریه","مارس","آوریل","مه","ژوئن","ژوئیه","اوت","سپتامبر","اکتبر","نوامبر","دسامبر"];
   return { day: d.getDate(), mon: lang === "fa" ? monthsFa[d.getMonth()] : monthsEn[d.getMonth()] };
 }
+
+// Poster image shown as the event's icon on the homepage card (a sheet column "image" also works).
+const EVENT_IMAGES = {
+  "mehregan-harvest": "images/harvest-gratitude-poster.jpg"
+};
+// Events whose Register button opens the full event page (description + poster) instead of the inline form.
+const FULL_PAGE_EVENTS = ["mehregan-harvest"];
 
 async function getRegistrationCount(eventId){
   // Live headcounts aren't tracked client-side anymore (registrations go straight to
@@ -401,13 +416,18 @@ async function renderEvents(){
     const isFull = remaining !== null && remaining <= 0;
     const dateParts = formatDate(ev.date, currentLang);
 
+    const eventUrl = `events/${ev.id}.html${currentLang==="fa" ? "?lang=fa" : ""}`;
+    const evImage = ev.image || EVENT_IMAGES[ev.id];
+    const opensFullPage = FULL_PAGE_EVENTS.includes(ev.id);
     const card = document.createElement("div");
-    card.className = "event-card";
+    card.className = "event-card" + (evImage ? " has-thumb" : "");
     card.innerHTML = `
-      <div class="event-date"><span class="day">${dateParts.day}</span><span class="mon">${dateParts.mon}</span></div>
+      ${evImage
+        ? `<a class="event-thumb" href="${eventUrl}"><img src="${evImage}" alt="" loading="lazy"><span class="event-thumb-date">${dateParts.day} ${dateParts.mon}</span></a>`
+        : `<div class="event-date"><span class="day">${dateParts.day}</span><span class="mon">${dateParts.mon}</span></div>`}
       <div class="event-info">
         <div class="event-tag">${ev.program}</div>
-        <h3><a href="events/${ev.id}.html${currentLang==="fa" ? "?lang=fa" : ""}" style="color:inherit;text-decoration:none;">${currentLang==="fa" ? ev.title_fa : ev.title_en}</a></h3>
+        <h3><a href="${eventUrl}" style="color:inherit;text-decoration:none;">${currentLang==="fa" ? ev.title_fa : ev.title_en}</a></h3>
         <div class="event-meta"><span>🕔 ${currentLang==="fa" && ev.time_fa ? ev.time_fa : ev.time}</span><span>📍 ${currentLang==="fa" ? ev.loc_fa : ev.loc_en}</span></div>
         <p class="event-desc">${currentLang==="fa" ? ev.desc_fa : ev.desc_en}</p>
         <form class="reg-form" data-event="${ev.id}">
@@ -429,7 +449,9 @@ async function renderEvents(){
 
     const regBtn = card.querySelector(".btn-register");
     const form = card.querySelector(".reg-form");
-    if(!isFull){
+    if(!isFull && opensFullPage){
+      regBtn.addEventListener("click", function(){ window.location.href = eventUrl; });
+    } else if(!isFull){
       regBtn.addEventListener("click", function(){
         const opening = form.classList.toggle("open");
         regBtn.textContent = opening ? t('cancel') : t('register');
