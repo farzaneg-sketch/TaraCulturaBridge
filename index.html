@@ -265,7 +265,7 @@ const TRANSLATIONS = {
     contact_lede:"Questions, ideas, or just want to say hello? Reach us here.",
     contact_email_label:"Email", contact_phone_label:"Phone", contact_instagram_label:"Instagram",
     footer_text:"© 2026 Tara Cultural Bridge Society — info@tarabridge.ca",
-    register:"Register", cancel:"Cancel", registered:"Registered ✓", full:"Full", spots_left:"spots left",
+    register:"Register", waitlist:"Full — join waitlist", cancel:"Cancel", registered:"Registered ✓", full:"Full", spots_left:"spots left",
     reg_kidName:"Child's name", reg_kidAge:"Child's age", reg_parentName:"Parent's name",
     reg_email:"Email", reg_phone:"Phone", reg_allergy:"Allergies (write “None” if none)",
     reg_submit:"Confirm registration",
@@ -304,7 +304,7 @@ const TRANSLATIONS = {
     contact_lede:"سؤال یا ایده‌ای دارید یا فقط می‌خواهید سلام کنید؟ از این طریق با ما در ارتباط باشید.",
     contact_email_label:"ایمیل", contact_phone_label:"تلفن", contact_instagram_label:"اینستاگرام",
     footer_text:"© ۲۰۲۶ انجمن پل فرهنگی تارا — info@tarabridge.ca",
-    register:"ثبت‌نام", cancel:"انصراف", registered:"ثبت‌نام شد ✓", full:"تکمیل ظرفیت", spots_left:"جای خالی",
+    register:"ثبت‌نام", waitlist:"تکمیل ظرفیت — لیست انتظار", cancel:"انصراف", registered:"ثبت‌نام شد ✓", full:"تکمیل ظرفیت", spots_left:"جای خالی",
     reg_kidName:"نام کودک", reg_kidAge:"سن کودک", reg_parentName:"نام والد",
     reg_email:"ایمیل", reg_phone:"تلفن", reg_allergy:"حساسیت غذایی (در صورت نبود «ندارد» بنویسید)",
     reg_submit:"تأیید ثبت‌نام",
@@ -399,6 +399,8 @@ const EVENT_IMAGES = {
 };
 // Events whose Register button opens the full event page (description + poster) instead of the inline form.
 const FULL_PAGE_EVENTS = ["mehregan-harvest"];
+// Events whose registration is closed (capacity reached); their page offers a waitlist instead.
+const CLOSED_EVENTS = ["mehregan-harvest"];
 
 async function getRegistrationCount(eventId){
   // Live headcounts aren't tracked client-side anymore (registrations go straight to
@@ -419,6 +421,7 @@ async function renderEvents(){
     const eventUrl = `events/${ev.id}.html${currentLang==="fa" ? "?lang=fa" : ""}`;
     const evImage = ev.image || EVENT_IMAGES[ev.id];
     const opensFullPage = FULL_PAGE_EVENTS.includes(ev.id);
+    const closedEvent = CLOSED_EVENTS.includes(ev.id);
     const card = document.createElement("div");
     card.className = "event-card" + (evImage ? " has-thumb" : "");
     card.innerHTML = `
@@ -442,7 +445,7 @@ async function renderEvents(){
         </form>
       </div>
       <div class="event-action">
-        <button class="btn-register" ${isFull ? "disabled" : ""}>${isFull ? t('full') : t('register')}</button>
+        <button class="btn-register" ${isFull ? "disabled" : ""}>${isFull ? t('full') : closedEvent ? t('waitlist') : t('register')}</button>
       </div>
     `;
     list.appendChild(card);

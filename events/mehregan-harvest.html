@@ -82,7 +82,7 @@
         <ul class="hg-chips" id="chips">
           <li class="hl">For kids 5 to 10</li>
           <li>Free event</li>
-          <li>Registration required — spots are limited</li>
+          <li>Registration full — waitlist open</li>
           <li>All materials provided</li>
         </ul>
         <p class="event-desc hg-summary" id="summary">A hands-on workshop for children ages 5–10 celebrating Thanksgiving and the harvest festival of northern Iran through stories, gratitude crafts, a short collaborative drama and a traditional dance.</p>
@@ -118,15 +118,17 @@
         </div>
 
         <div class="hg-register">
-          <h2 id="regTitle">Register</h2>
+          <h2 id="regTitle">Registration is full</h2>
+          <div class="hg-note" id="closedNote">
+            <p id="closedMsg">Thank you for your interest! This workshop has reached its capacity, so we are unable to register more children. If you'd like, leave your details below and we will contact you if a spot opens up due to a cancellation.</p>
+          </div>
+          <h3 id="waitTitle" style="margin:22px 0 10px;font-size:18px;">Join the waitlist</h3>
           <form class="reg-form open" id="regForm">
             <input type="text" placeholder="Child's name" class="reg-kidname" required>
             <input type="number" min="5" max="10" placeholder="Child's age (5–10)" class="reg-kidage" required>
             <input type="text" placeholder="Parent's name" class="reg-parentname" required>
-            <input type="email" placeholder="Email" class="reg-email" required>
             <input type="tel" placeholder="Phone" class="reg-phone" required>
-            <textarea placeholder="Allergies (write “None” if none)" class="reg-allergy" required></textarea>
-            <button type="submit" class="btn btn-solid reg-submit">Confirm registration</button>
+            <button type="submit" class="btn btn-solid reg-submit">Join waitlist</button>
             <span class="reg-msg" id="regMsg"></span>
           </form>
         </div>
@@ -170,7 +172,7 @@ const TEXT = {
     loc: "اتاق برنامه‌های لین ولی، کتابخانه لین ولی",
     back: "→ بازگشت به همه رویدادها",
     switchLabel: "English",
-    chips: ["برای کودکان ۵ تا ۱۰ سال", "رایگان", "ثبت‌نام الزامی است — ظرفیت محدود", "همه وسایل فراهم می‌شود"],
+    chips: ["برای کودکان ۵ تا ۱۰ سال", "رایگان", "ظرفیت تکمیل شده — لیست انتظار باز است", "همه وسایل فراهم می‌شود"],
     summary: "کارگاهی عملی برای کودکان ۵ تا ۱۰ سال در جشن شکرگزاری و جشن برداشت شمال ایران؛ با قصه‌گویی، ساخت کاردستی‌های سپاسگزاری، یک نمایش کوتاه گروهی و یک رقص سنتی.",
     aboutTitle: "درباره کارگاه",
     about: [
@@ -193,12 +195,15 @@ const TEXT = {
       "برای شرکت هر کودک، داشتن رضایت‌نامه امضاشده الزامی است.",
       "لطفاً در طول کارگاه در دسترس باشید تا اگر کودکتان به شما نیاز داشت، سریعاً پاسخ دهید."
     ],
-    regTitle: "ثبت‌نام",
+    regTitle: "ظرفیت ثبت‌نام تکمیل شده است",
+    closedMsg: "از علاقه شما سپاسگزاریم! ظرفیت این کارگاه تکمیل شده و متأسفانه امکان ثبت‌نام کودکان بیشتر وجود ندارد. در صورت تمایل، اطلاعات خود را در فرم زیر بگذارید تا اگر به دلیل انصراف کسی جایی خالی شد، با شما تماس بگیریم.",
+    waitTitle: "ثبت‌نام در لیست انتظار",
     ph: {
       kidname: "نام کودک", kidage: "سن کودک (۵ تا ۱۰)", parentname: "نام والد",
-      email: "ایمیل", phone: "تلفن", allergy: "حساسیت غذایی (در صورت نبود «ندارد» بنویسید)"
+      phone: "تلفن"
     },
-    submit: "تأیید ثبت‌نام",
+    submit: "ثبت در لیست انتظار",
+    waitSuccess: "شما در لیست انتظار ثبت شدید. اگر جایی خالی شود با شما تماس می‌گیریم.",
     posterCap: "پوستر رویداد — برای دیدن اندازه کامل، روی آن بزنید",
     footer: "© ۲۰۲۶ انجمن پل فرهنگی تارا — info@tarabridge.ca"
   }
@@ -233,6 +238,8 @@ function applyFarsi(){
   document.querySelector("#parentsNote h3").textContent = f.parentsTitle;
   document.querySelectorAll("#parentsNote li").forEach((li, i) => { li.textContent = f.parents[i]; });
   document.getElementById("regTitle").textContent = f.regTitle;
+  document.getElementById("closedMsg").textContent = f.closedMsg;
+  document.getElementById("waitTitle").textContent = f.waitTitle;
   const form = document.getElementById("regForm");
   for (const k in f.ph) form.querySelector(".reg-" + k).placeholder = f.ph[k];
   form.querySelector(".reg-submit").textContent = f.submit;
@@ -273,33 +280,23 @@ document.getElementById("regForm").addEventListener("submit", async function(e){
   const kidNameVal = form.querySelector(".reg-kidname").value.trim();
   const kidAgeVal = form.querySelector(".reg-kidage").value.trim();
   const parentNameVal = form.querySelector(".reg-parentname").value.trim();
-  const emailVal = form.querySelector(".reg-email").value.trim();
   const phoneVal = form.querySelector(".reg-phone").value.trim();
-  const allergyVal = form.querySelector(".reg-allergy").value.trim();
   const msgEl = document.getElementById("regMsg");
   try{
+    // Registration is closed. The sheet script expects registration-shaped rows, so waitlist
+    // entries are sent in that shape and tagged WAITLIST in the event columns.
     await sendToSheet({
       type: "registration",
-      event: EVENT_ID,
-      eventTitle: EVENT_TITLE,
+      event: EVENT_ID + "-WAITLIST",
+      eventTitle: EVENT_TITLE + " — WAITLIST",
       kidName: kidNameVal,
       kidAge: kidAgeVal,
       parentName: parentNameVal,
-      email: emailVal,
+      email: "n/a (waitlist)",
       phone: phoneVal,
-      allergy: allergyVal
+      allergy: "n/a (waitlist)"
     });
-    sendConfirmationEmail({
-      to: emailVal,
-      parentName: parentNameVal,
-      kidName: kidNameVal,
-      eventTitle: EVENT_TITLE,
-      eventDate: EVENT_DATE_DISPLAY,
-      eventTime: EVENT_TIME_DISPLAY,
-      eventLoc: EVENT_LOC_DISPLAY,
-      lang: LANG
-    });
-    msgEl.textContent = LANG === "fa" ? "ثبت‌نام شما انجام شد — آنجا می‌بینیمتان!" : "You're registered — see you there!";
+    msgEl.textContent = LANG === "fa" ? TEXT.fa.waitSuccess : "You're on the waitlist. We'll contact you if a spot opens up.";
     msgEl.className = "reg-msg ok";
     form.querySelector(".reg-submit").disabled = true;
   }catch(err){
